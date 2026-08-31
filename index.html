@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohood Majed Ahmed — Mathematics × Computer Science × Data Science</title>
+<meta name="description" content="Ohood Majed Ahmed — Aspiring Data Scientist and Mathematics & Computer Science student. Portfolio of projects in machine learning, data analysis, and mathematics.">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  /* Palette */
+  --bg:            #F7F8FA;
+  --bg-alt:        #F1F3F7;
+  --navy:          #172033;
+  --slate:         #40506A;
+  --blue:          #3B82C4;
+  --purple:        #7C6BC4;
+  --teal:          #3FA7A3;
+  --white:         #FFFFFF;
+  --border:        #E2E7F0;
+  --border-strong: #CBD4E3;
+  --text:          #2B3242;
+  --text-muted:    #5C6B82;
+
+  /* Gradients (used sparingly) */
+  --grad-primary: linear-gradient(120deg, var(--blue) 0%, var(--purple) 55%, var(--teal) 100%);
+  --grad-soft:    linear-gradient(135deg, rgba(59,130,196,0.10), rgba(124,107,196,0.08) 50%, rgba(63,167,163,0.10));
+
+  /* Typography */
+  --font-display: -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body:    -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono:    ui-monospace, "SFMono-Regular", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+
+  /* Layout */
+  --max-width: 1180px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --nav-h: 72px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 900ms;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img, svg{ display:block; max-width:100%; }
+a{ color: inherit; text-decoration: none; }
+ul{ list-style: none; margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+button{ font-family: inherit; cursor:pointer; }
+
+/* Visible focus states (accessibility) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible{
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.container{
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.section-label{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.section-label::before{
+  content:"";
+  width: 22px;
+  height: 1px;
+  background: var(--blue);
+  display:inline-block;
+}
+
+.section-heading{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+.section-sub{
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  max-width: 620px;
+  margin-bottom: 48px;
+}
+
+section{
+  padding: 108px 0;
+  position: relative;
+}
+
+.visually-hidden{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip: rect(0,0,0,0);
+  white-space:nowrap; border:0;
+}
+
+.skip-link{
+  position:absolute;
+  left: 12px; top: -60px;
+  background: var(--navy);
+  color:#fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  z-index: 200;
+  transition: top var(--dur-fast) var(--ease);
+}
+.skip-link:focus{ top: 12px; }
+
+/* ============================================================
+   REVEAL-ON-SCROLL
+   ============================================================ */
+.reveal{
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+}
+.reveal.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-stagger > *{ transition-delay: calc(var(--i, 0) * 70ms); }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal{ opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.navbar{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 100;
+  background: rgba(247, 248, 250, 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.navbar.is-scrolled{
+  box-shadow: 0 8px 24px -18px rgba(23,32,51,0.35);
+}
+.nav-inner{
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 100%;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+}
+.logo{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--navy);
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  letter-spacing: 0.02em;
+}
+.logo-mark{
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--grad-primary);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap: 4px;
+}
+.nav-links a{
+  position:relative;
+  font-size: 0.94rem;
+  font-weight: 500;
+  color: var(--slate);
+  padding: 9px 16px;
+  border-radius: 999px;
+  transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.nav-links a:hover{
+  color: var(--navy);
+  background: rgba(59,130,196,0.08);
+}
+.nav-links a.active{
+  color: var(--blue);
+  font-weight: 600;
+}
+.nav-links a.active::after{
+  content:"";
+  position:absolute;
+  left: 16px; right:16px; bottom: 3px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--grad-primary);
+}
+
+.nav-toggle{
+  display:none;
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--white);
+  align-items:center;
+  justify-content:center;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-toggle span{
+  width: 18px; height: 2px;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: transform var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 860px){
+  .nav-links{
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 20px 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--dur-med) var(--ease);
+    box-shadow: 0 16px 26px -20px rgba(23,32,51,0.3);
+  }
+  .nav-links.is-open{ max-height: 420px; }
+  .nav-links a{ padding: 13px 10px; border-radius: 8px; }
+  .nav-toggle{ display:flex; }
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 9px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-size: 0.96rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  white-space: nowrap;
+}
+.btn-primary{
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 10px 24px -12px rgba(23,32,51,0.55);
+}
+.btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px -12px rgba(23,32,51,0.6);
+}
+.btn-secondary{
+  background: var(--white);
+  color: var(--navy);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover{
+  transform: translateY(-2px);
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 12px 22px -16px rgba(59,130,196,0.5);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position: relative;
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding-top: var(--nav-h);
+  overflow: hidden;
+  background: var(--bg);
+}
+.hero-bg{
+  position:absolute;
+  inset:0;
+  z-index: 0;
+  opacity: 0.9;
+}
+.hero-bg svg{ width:100%; height:100%; }
+
+.hero-content{
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 28px;
+  text-align:center;
+}
+.hero-eyebrow{
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+  font-weight: 700;
+  margin-bottom: 22px;
+  display:inline-flex;
+  align-items:center;
+  gap: 10px;
+}
+.hero-eyebrow .dot{
+  width:7px; height:7px; border-radius:50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(63,167,163,0.16);
+}
+
+.hero h1{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6vw, 3.7rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  margin-bottom: 18px;
+}
+
+.hero-role{
+  font-size: clamp(1.02rem, 2vw, 1.2rem);
+  color: var(--slate);
+  font-weight: 500;
+  margin-bottom: 26px;
+}
+.hero-role .sep{
+  color: var(--border-strong);
+  margin: 0 10px;
+}
+
+.hero-statement{
+  font-size: 1.12rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.75;
+}
+.hero-statement em{
+  font-style: normal;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.hero-ctas{
+  display:flex;
+  gap: 16px;
+  justify-content:center;
+  flex-wrap: wrap;
+}
+
+.hero-seal{
+  position: absolute;
+  top: 108px;
+  right: 48px;
+  width: 128px;
+  height: 128px;
+  z-index: 2;
+  opacity: 0.9;
+  pointer-events: none;
+}
+.hero-seal-svg{
+  width: 100%;
+  height: 100%;
+  animation: sealSpin 40s linear infinite;
+}
+@keyframes sealSpin{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+@media (max-width: 1080px){
+  .hero-seal{ width: 96px; height: 96px; top: 90px; right: 22px; }
+}
+@media (max-width: 760px){
+  .hero-seal{ display: none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-seal-svg{ animation: none; }
+}
+
+.scroll-cue{
+  position:absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: floaty 2.6s ease-in-out infinite;
+}
+.scroll-cue svg{ width: 14px; height: 20px; }
+@keyframes floaty{
+  0%, 100%{ transform: translate(-50%, 0); }
+  50%{ transform: translate(-50%, 8px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .scroll-cue{ animation: none; }
+}
+
+/* ============================================================
+   CARDS (shared)
+   ============================================================ */
+.card{
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: transform var(--dur-med) var(--ease), box-shadow var(--dur-med) var(--ease), border-color var(--dur-med) var(--ease);
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about{ background: var(--bg); }
+.about-grid{
+  display:grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 56px;
+  align-items:start;
+}
+.about-bio p{
+  color: var(--text);
+  font-size: 1.03rem;
+  margin-bottom: 20px;
+}
+.about-bio p:last-child{ margin-bottom:0; }
+
+.bring-list{
+  margin-top: 34px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.bring-item{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.bring-item .icon{
+  width: 30px; height:30px;
+  border-radius: 8px;
+  flex: none;
+  display:flex; align-items:center; justify-content:center;
+  background: var(--grad-soft);
+  color: var(--blue);
+}
+.bring-item .icon svg{ width:16px; height:16px; }
+
+.badges-panel{
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+.badges-panel::before{
+  content:"";
+  position:absolute;
+  top:-40px; right:-40px;
+  width: 160px; height:160px;
+  border-radius:50%;
+  background: var(--grad-soft);
+}
+.badges-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--navy);
+  margin-bottom: 6px;
+  position:relative;
+}
+.badges-note{
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  position:relative;
+}
+.badge-list{
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+  position:relative;
+}
+.badge{
+  display:flex;
+  gap: 14px;
+  align-items:flex-start;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.badge:hover{ border-color: var(--blue); transform: translateX(2px); }
+.badge-icon{
+  width: 38px; height:38px;
+  border-radius: 10px;
+  flex: none;
+  display:flex; align-items:center; justify-content:center;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight:700;
+  font-family: var(--font-mono);
+}
+.badge-icon.i-ai{ background: linear-gradient(135deg, var(--blue), var(--purple)); }
+.badge-icon.i-ga{ background: linear-gradient(135deg, var(--purple), var(--teal)); }
+.badge-icon.i-matlab{ background: linear-gradient(135deg, var(--slate), var(--blue)); }
+.badge-icon.i-latex{ background: linear-gradient(135deg, var(--teal), var(--blue)); }
+.badge-name{
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.badge-desc{
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height:1.5;
+}
+
+@media (max-width: 900px){
+  .about-grid{ grid-template-columns: 1fr; }
+  .bring-list{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px){
+  .bring-list{ grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+.skills{ background: var(--bg-alt); }
+.skills-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+.skill-group{
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  transition: box-shadow var(--dur-med) var(--ease), transform var(--dur-med) var(--ease);
+}
+.skill-group:hover{
+  box-shadow: 0 20px 34px -26px rgba(23,32,51,0.3);
+  transform: translateY(-3px);
+}
+.skill-group-head{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.skill-group-icon{
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color:#fff;
+}
+.skill-group-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 1rem;
+}
+.tag-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+}
+.tag{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 7px 12px;
+  border-radius: 7px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  color: var(--slate);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.tag:hover{
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+.projects{ background: var(--bg); }
+.projects-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 26px;
+}
+.project-card{
+  padding: 28px;
+  display:flex;
+  flex-direction:column;
+  position: relative;
+  overflow:hidden;
+}
+.project-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 26px 44px -28px rgba(23,32,51,0.35);
+  border-color: var(--border-strong);
+}
+.project-card::before{
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0;
+  height: 3px;
+  background: var(--grad-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-med) var(--ease);
+}
+.project-card:hover::before{ transform: scaleX(1); }
+
+.project-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  margin-bottom: 14px;
+}
+.project-number{
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--blue);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: transform var(--dur-med) var(--ease), color var(--dur-med) var(--ease);
+}
+.project-card:hover .project-number{
+  transform: translateX(3px);
+  color: var(--purple);
+}
+.project-visual{
+  width: 56px; height: 56px;
+  flex: none;
+  border-radius: 12px;
+  background: var(--grad-soft);
+  display:flex; align-items:center; justify-content:center;
+  overflow: hidden;
+}
+.project-visual svg{ width: 40px; height:40px; transition: transform var(--dur-slow) var(--ease); }
+.project-card:hover .project-visual svg{ transform: scale(1.08) rotate(-2deg); }
+
+.project-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.16rem;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height:1.3;
+}
+.project-award{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--teal);
+  background: rgba(63,167,163,0.1);
+  padding: 5px 11px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  width: fit-content;
+}
+.project-desc{
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+.project-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 7px;
+}
+.project-tags .tag{ font-size: 0.72rem; padding: 5px 10px; }
+
+/* ============================================================
+   ACHIEVEMENTS
+   ============================================================ */
+.achievements{ background: var(--bg-alt); }
+.achievements-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.milestone{
+  padding: 30px;
+  position: relative;
+}
+.milestone.is-main{
+  border-color: var(--blue);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F7FAFD 100%);
+}
+.milestone:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 22px 38px -28px rgba(23,32,51,0.32);
+}
+.milestone-rank{
+  font-size: 2rem;
+  margin-bottom: 14px;
+  line-height:1;
+}
+.milestone-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.08rem;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height:1.35;
+}
+.milestone-desc{
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact{ background: var(--bg); }
+.contact-panel{
+  background: var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 64px 48px;
+  text-align:center;
+  position: relative;
+  overflow:hidden;
+}
+.contact-panel .noise{
+  position:absolute; inset:0;
+  opacity: 0.5;
+  z-index:0;
+}
+.contact-inner{ position:relative; z-index:1; }
+.contact-heading{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing:-0.01em;
+}
+.contact-message{
+  color: rgba(255,255,255,0.7);
+  max-width: 480px;
+  margin: 0 auto 34px;
+  font-size: 1rem;
+}
+.contact-buttons{
+  display:flex;
+  gap: 14px;
+  justify-content:center;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+.contact-btn{
+  display:inline-flex;
+  align-items:center;
+  gap: 10px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.contact-btn:hover{
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.4);
+  transform: translateY(-2px);
+}
+.contact-btn svg{ width:18px; height:18px; }
+
+.email-copy{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  margin: 0 auto 34px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.email-copy svg{ width: 15px; height: 15px; flex: none; }
+.email-copy:hover{ color: #fff; background: rgba(255,255,255,0.06); }
+
+.contact-closing{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  color: #fff;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 30px;
+  background: linear-gradient(90deg, #fff, #B9D6EE 45%, #D8CFF2 70%, #A9E1DC);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (max-width: 640px){
+  .contact-panel{ padding: 46px 24px; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  padding: 34px 0 42px;
+  text-align:center;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+footer p{
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+footer .cross{ color: var(--purple); margin: 0 6px; }
+
+/* ============================================================
+   MISC UTILITIES
+   ============================================================ */
+.eyebrow-x{ color: var(--purple); }
+</style>
+</head>
+<body>
+
+<a href="#home" class="skip-link">Skip to main content</a>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="logo" aria-label="Ohood Majed Ahmed — Home">
+      <span class="logo-mark" aria-hidden="true">OM</span>
+      <span>Ohood Majed Ahmed</span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-nav>Home</a></li>
+        <li><a href="#about" data-nav>About</a></li>
+        <li><a href="#skills" data-nav>Skills</a></li>
+        <li><a href="#projects" data-nav>Projects</a></li>
+        <li><a href="#achievements" data-nav>Achievements</a></li>
+        <li><a href="#contact" data-nav>Contact</a></li>
+      </ul>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="home">
+  <div class="hero-bg" aria-hidden="true">
+    <!-- Subtle mathematical / data-science inspired background: coordinate grid, scatter points,
+         a regression curve, connected graph nodes, and a few mathematical symbols. Kept low-opacity. -->
+    <svg viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" role="presentation">
+      <defs>
+        <linearGradient id="curveGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#3B82C4"/>
+          <stop offset="55%" stop-color="#7C6BC4"/>
+          <stop offset="100%" stop-color="#3FA7A3"/>
+        </linearGradient>
+        <pattern id="gridPattern" width="56" height="56" patternUnits="userSpaceOnUse">
+          <path d="M 56 0 L 0 0 0 56" fill="none" stroke="#40506A" stroke-width="1" opacity="0.06"/>
+        </pattern>
+      </defs>
+
+      <rect width="1400" height="900" fill="url(#gridPattern)"/>
+
+      <!-- axes -->
+      <line x1="120" y1="760" x2="1300" y2="760" stroke="#172033" stroke-width="1.2" opacity="0.08"/>
+      <line x1="120" y1="120" x2="120" y2="760" stroke="#172033" stroke-width="1.2" opacity="0.08"/>
+
+      <!-- regression / statistical curve -->
+      <path d="M140,700 C 320,660 420,420 620,360 C 820,300 980,260 1280,150"
+            fill="none" stroke="url(#curveGrad)" stroke-width="2.2" opacity="0.28" stroke-linecap="round" id="heroCurve"/>
+
+      <!-- scatter points -->
+      <g fill="#3B82C4" opacity="0.35">
+        <circle cx="230" cy="640" r="4"/>
+        <circle cx="300" cy="600" r="3.4"/>
+        <circle cx="360" cy="560" r="4.6"/>
+        <circle cx="430" cy="520" r="3.2"/>
+        <circle cx="520" cy="470" r="4"/>
+        <circle cx="600" cy="420" r="3.6"/>
+        <circle cx="690" cy="380" r="4.4"/>
+        <circle cx="780" cy="340" r="3.4"/>
+        <circle cx="880" cy="300" r="4"/>
+        <circle cx="980" cy="260" r="3.6"/>
+        <circle cx="1080" cy="230" r="4.4"/>
+        <circle cx="1180" cy="190" r="3.4"/>
+      </g>
+
+      <!-- connected graph / network nodes (CS motif) -->
+      <g stroke="#7C6BC4" stroke-width="1" opacity="0.22">
+        <line x1="980" y1="620" x2="1120" y2="560"/>
+        <line x1="1120" y1="560" x2="1240" y2="640"/>
+        <line x1="1120" y1="560" x2="1150" y2="440"/>
+        <line x1="1240" y1="640" x2="1180" y2="740"/>
+        <line x1="980" y1="620" x2="900" y2="720"/>
+      </g>
+      <g fill="#7C6BC4" opacity="0.4">
+        <circle cx="980" cy="620" r="5"/>
+        <circle cx="1120" cy="560" r="6"/>
+        <circle cx="1240" cy="640" r="5"/>
+        <circle cx="1150" cy="440" r="4.5"/>
+        <circle cx="1180" cy="740" r="4.5"/>
+        <circle cx="900" cy="720" r="4.5"/>
+      </g>
+
+      <!-- distribution curve (bell shape), bottom left -->
+      <path d="M60,820 C 140,820 150,690 220,690 C 290,690 300,820 380,820"
+            fill="none" stroke="#3FA7A3" stroke-width="1.6" opacity="0.22"/>
+
+      <!-- mathematical symbols, very low opacity -->
+      <text x="150" y="230" font-family="Georgia, serif" font-size="52" fill="#172033" opacity="0.05">&#931;</text>
+      <text x="1220" y="820" font-family="Georgia, serif" font-size="46" fill="#172033" opacity="0.05">&#8747;</text>
+      <text x="640" y="180" font-family="Georgia, serif" font-size="40" fill="#172033" opacity="0.05">&#960;</text>
+      <text x="60" y="500" font-family="Georgia, serif" font-size="34" fill="#172033" opacity="0.05">f(x)</text>
+      <text x="1000" y="130" font-family="Georgia, serif" font-size="30" fill="#172033" opacity="0.05">&#948;</text>
+    </svg>
+  </div>
+
+  <div class="hero-content reveal" id="heroContent">
+    <p class="hero-eyebrow"><span class="dot" aria-hidden="true"></span>Mathematics &middot; Computer Science &middot; Data Science</p>
+    <h1>Ohood Majed Ahmed</h1>
+    <p class="hero-role">Aspiring Data Scientist <span class="sep">|</span> Mathematics &amp; Computer Science Student</p>
+    <p class="hero-statement">Where mathematical thinking meets computation and data — I build <em>practical, data-driven solutions</em> to real-world problems.</p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-primary" data-nav>Explore My Work</a>
+      <a href="#contact" class="btn btn-secondary" data-nav>Let's Connect</a>
+    </div>
+  </div>
+
+  <!-- Decorative seal: a small circular badge combining Mathematics, Data Science and
+       Computer Science motifs. Purely ornamental — rotates slowly and respects reduced motion. -->
+  <div class="hero-seal" aria-hidden="true">
+    <svg viewBox="0 0 160 160" class="hero-seal-svg">
+      <defs>
+        <path id="sealTextPath" d="M 80,80 m -62,0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"/>
+        <linearGradient id="sealRingGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#3B82C4"/>
+          <stop offset="50%" stop-color="#7C6BC4"/>
+          <stop offset="100%" stop-color="#3FA7A3"/>
+        </linearGradient>
+      </defs>
+      <circle cx="80" cy="80" r="78" fill="#FFFFFF" opacity="0.6"/>
+      <circle cx="80" cy="80" r="70" fill="none" stroke="url(#sealRingGrad)" stroke-width="1.1" opacity="0.55"/>
+      <circle cx="80" cy="80" r="52" fill="none" stroke="#40506A" stroke-width="0.8" stroke-dasharray="1 5" opacity="0.4"/>
+      <text font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="8.6" letter-spacing="2.2" fill="#40506A" opacity="0.62">
+        <textPath href="#sealTextPath" startOffset="0%">MATHEMATICS &#8226; DATA SCIENCE &#8226; COMPUTER SCIENCE &#8226; </textPath>
+      </text>
+      <!-- center emblem: network node + sigma, echoing the math / CS / DS themes -->
+      <g opacity="0.85">
+        <circle cx="80" cy="80" r="30" fill="#F7F8FA" stroke="#E2E7F0" stroke-width="1"/>
+        <text x="80" y="76" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#3B82C4">&#931;</text>
+        <g stroke="#7C6BC4" stroke-width="1" opacity="0.75">
+          <line x1="65" y1="94" x2="80" y2="88"/>
+          <line x1="95" y1="94" x2="80" y2="88"/>
+          <line x1="65" y1="94" x2="95" y2="94"/>
+        </g>
+        <circle cx="65" cy="94" r="2.3" fill="#3FA7A3"/>
+        <circle cx="95" cy="94" r="2.3" fill="#3FA7A3"/>
+        <circle cx="80" cy="88" r="2.3" fill="#7C6BC4"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <span>Scroll</span>
+    <svg viewBox="0 0 14 20" fill="none"><rect x="1" y="1" width="12" height="18" rx="6" stroke="#5C6B82" stroke-width="1.4"/><circle cx="7" cy="6" r="1.6" fill="#5C6B82"/></svg>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-label" aria-hidden="true">01 &nbsp;/&nbsp; About</div>
+    <h2 class="section-heading reveal">A mathematical mind, applied to data</h2>
+    <p class="section-sub reveal">The academic foundation and hands-on training behind my work.</p>
+
+    <div class="about-grid">
+      <div class="about-bio reveal">
+        <p>I am a Mathematics student at the University of Bahrain with a minor in Computer Science and a growing focus on Data Science and Machine Learning. My background in mathematics has developed my analytical thinking, statistical understanding, and problem-solving abilities, while my computer science studies have helped me build programming and computational skills.</p>
+        <p>I enjoy working with data to discover patterns, generate insights, and build predictive models that address real-world problems. Through academic projects, Data Science training, competitions, and hands-on projects, I have gained experience with Python, SQL, MATLAB, data analysis, machine learning, statistics, and data visualization.</p>
+        <p>I am particularly interested in the intersection of mathematics, computer science, and data science, and I continuously work on practical projects to strengthen my technical skills and apply what I learn to meaningful problems.</p>
+
+        <div class="bring-list reveal-stagger">
+          <div class="bring-item" style="--i:0">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M4 15l4-6 4 3 4-8 4 6"/></svg></span>
+            Analytical &amp; Mathematical Thinking
+          </div>
+          <div class="bring-item" style="--i:1">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></span>
+            Problem Solving
+          </div>
+          <div class="bring-item" style="--i:2">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v4l6 4 6-4V8"/></svg></span>
+            Data-Driven Thinking
+          </div>
+          <div class="bring-item" style="--i:3">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+            Fast Learning
+          </div>
+          <div class="bring-item" style="--i:4">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 1.4 1.4l3.5-3.5a5 5 0 0 1-6.7 6.7l-6.9 6.9a2 2 0 0 1-2.8-2.8l6.9-6.9a5 5 0 0 1 6.7-6.7l-3.5 3.5z"/></svg></span>
+            Hands-on Troubleshooting
+          </div>
+          <div class="bring-item" style="--i:5">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h5M20 20v-5h-5M4.6 15a8 8 0 0 0 14.8-3M19.4 9A8 8 0 0 0 4.6 12"/></svg></span>
+            Continuous Learning
+          </div>
+        </div>
+      </div>
+
+      <div class="badges-panel reveal">
+        <p class="badges-title">Achievements &amp; Technical Credentials</p>
+        <p class="badges-note">Training, achievements, and technical experience gained so far.</p>
+        <div class="badge-list">
+          <div class="badge">
+            <span class="badge-icon i-ai" aria-hidden="true">AI</span>
+            <div>
+              <p class="badge-name">AI &amp; Technology Achievement</p>
+              <p class="badge-desc">Achievement certificate from a Dubai initiative involving AI commands and technical learning.</p>
+            </div>
+          </div>
+          <div class="badge">
+            <span class="badge-icon i-ga" aria-hidden="true">GA</span>
+            <div>
+              <p class="badge-name">General Assembly — Data Science Training</p>
+              <p class="badge-desc">Practical training developing skills in Python, statistics, data analysis, machine learning, and real-world datasets.</p>
+            </div>
+          </div>
+          <div class="badge">
+            <span class="badge-icon i-matlab" aria-hidden="true">M</span>
+            <div>
+              <p class="badge-name">MATLAB</p>
+              <p class="badge-desc">Applied experience using MATLAB for mathematical computation and technical coursework.</p>
+            </div>
+          </div>
+          <div class="badge">
+            <span class="badge-icon i-latex" aria-hidden="true">TeX</span>
+            <div>
+              <p class="badge-name">LaTeX</p>
+              <p class="badge-desc">Experience using LaTeX for mathematical and technical documentation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SKILLS
+     ============================================================ -->
+<section class="skills" id="skills">
+  <div class="container">
+    <div class="section-label" aria-hidden="true">02 &nbsp;/&nbsp; Skills</div>
+    <h2 class="section-heading reveal">Tools &amp; techniques I work with</h2>
+    <p class="section-sub reveal">Skills developed and practiced through coursework, training, and independent projects.</p>
+
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <div class="skill-group-head">
+          <span class="skill-group-icon" style="background:var(--blue)" aria-hidden="true">&#931;</span>
+          <p class="skill-group-title">Mathematics &amp; Statistics</p>
+        </div>
+        <div class="tag-list">
+          <span class="tag">Mathematics</span>
+          <span class="tag">Statistics</span>
+          <span class="tag">Analytical Thinking</span>
+          <span class="tag">Statistical Analysis</span>
+          <span class="tag">Problem Solving</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal">
+        <div class="skill-group-head">
+          <span class="skill-group-icon" style="background:var(--navy)" aria-hidden="true">&lt;/&gt;</span>
+          <p class="skill-group-title">Programming &amp; Databases</p>
+        </div>
+        <div class="tag-list">
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+          <span class="tag">MATLAB</span>
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">LaTeX</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal">
+        <div class="skill-group-head">
+          <span class="skill-group-icon" style="background:var(--purple)" aria-hidden="true">&#9679;</span>
+          <p class="skill-group-title">Data Science</p>
+        </div>
+        <div class="tag-list">
+          <span class="tag">Pandas</span>
+          <span class="tag">NumPy</span>
+          <span class="tag">Exploratory Data Analysis</span>
+          <span class="tag">Data Cleaning</span>
+          <span class="tag">Data Preprocessing</span>
+          <span class="tag">Data Visualization</span>
+          <span class="tag">Feature Engineering</span>
+          <span class="tag">Predictive Modeling</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal">
+        <div class="skill-group-head">
+          <span class="skill-group-icon" style="background:var(--teal)" aria-hidden="true">&#10022;</span>
+          <p class="skill-group-title">Machine Learning</p>
+        </div>
+        <div class="tag-list">
+          <span class="tag">Scikit-learn</span>
+          <span class="tag">Classification</span>
+          <span class="tag">Regression</span>
+          <span class="tag">K-Nearest Neighbors (KNN)</span>
+          <span class="tag">Decision Trees</span>
+          <span class="tag">Random Forest</span>
+          <span class="tag">Ensemble Methods</span>
+          <span class="tag">Cross-Validation</span>
+          <span class="tag">Grid Search</span>
+          <span class="tag">Hyperparameter Tuning</span>
+          <span class="tag">Model Evaluation</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal">
+        <div class="skill-group-head">
+          <span class="skill-group-icon" style="background:var(--slate)" aria-hidden="true">&#9881;</span>
+          <p class="skill-group-title">Other Tools</p>
+        </div>
+        <div class="tag-list">
+          <span class="tag">Jupyter Notebook</span>
+          <span class="tag">Excel</span>
+          <span class="tag">Blender</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECTS
+     ============================================================ -->
+<section class="projects" id="projects">
+  <div class="container">
+    <div class="section-label" aria-hidden="true">03 &nbsp;/&nbsp; Projects</div>
+    <h2 class="section-heading reveal">Academic, training &amp; personal projects</h2>
+    <p class="section-sub reveal">A selection of real work spanning machine learning, databases, mathematics, and 3D design.</p>
+
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">01 / Machine Learning</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <line x1="6" y1="40" x2="6" y2="10" stroke="#3B82C4" stroke-width="1.4" opacity="0.5"/>
+              <line x1="6" y1="40" x2="42" y2="40" stroke="#3B82C4" stroke-width="1.4" opacity="0.5"/>
+              <path d="M8,36 C 16,32 20,20 40,10" stroke="#7C6BC4" stroke-width="1.8" fill="none" opacity="0.7"/>
+              <circle cx="12" cy="33" r="2" fill="#3FA7A3"/>
+              <circle cx="18" cy="27" r="2" fill="#3FA7A3"/>
+              <circle cx="24" cy="22" r="2" fill="#3B82C4"/>
+              <circle cx="31" cy="17" r="2" fill="#3B82C4"/>
+              <circle cx="37" cy="12" r="2" fill="#7C6BC4"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Bahrain Rental Price Prediction Challenge</h3>
+        <span class="project-award">&#129352; 3rd Place — Kaggle Competition</span>
+        <p class="project-desc">A machine learning project focused on predicting monthly rental prices for properties in Bahrain. Involved cleaning real-world property listing data, handling missing values and duplicates, exploratory data analysis, feature engineering, and categorical/numerical preprocessing. Engineered property-related features, analyzed rental price distributions, and evaluated models using Mean Absolute Error (MAE), the competition's evaluation metric. Submitted to the Bahrain Rental Price Prediction Challenge on Kaggle.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">NumPy</span><span class="tag">Scikit-learn</span><span class="tag">Jupyter Notebook</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span><span class="tag">Kaggle</span>
+        </div>
+      </article>
+
+      <!-- Project 2 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">02 / Databases</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="12" cy="14" r="4" fill="#3B82C4" opacity="0.75"/>
+              <circle cx="34" cy="14" r="4" fill="#7C6BC4" opacity="0.75"/>
+              <circle cx="24" cy="34" r="4" fill="#3FA7A3" opacity="0.75"/>
+              <line x1="12" y1="14" x2="34" y2="14" stroke="#40506A" stroke-width="1.2" opacity="0.5"/>
+              <line x1="12" y1="14" x2="24" y2="34" stroke="#40506A" stroke-width="1.2" opacity="0.5"/>
+              <line x1="34" y1="14" x2="24" y2="34" stroke="#40506A" stroke-width="1.2" opacity="0.5"/>
+              <path d="M24 20 L24 12 M20 16 L28 16" stroke="#172033" stroke-width="1.4" opacity="0.35"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Tour Package Organizer — Database Management System</h3>
+        <p class="project-desc">An academic Computer Science project focused on developing a tour package organizer using database management concepts. Involved organizing and managing tour package information while applying relational database concepts, structured data management, and SQL — combining programming and database concepts to work with tour-related data and selections in an organized manner.</p>
+        <div class="project-tags">
+          <span class="tag">SQL</span><span class="tag">Database Management</span><span class="tag">Relational Database Concepts</span><span class="tag">Programming</span><span class="tag">Data Structures</span><span class="tag">Algorithms</span>
+        </div>
+      </article>
+
+      <!-- Project 3 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">03 / 3D Design</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M24 6 L40 15 V33 L24 42 L8 33 V15 Z" stroke="#40506A" stroke-width="1.3" fill="none" opacity="0.5"/>
+              <path d="M24 6 V24 M24 24 L40 15 M24 24 L8 15" stroke="#7C6BC4" stroke-width="1.3" opacity="0.6"/>
+              <path d="M24 24 V42 M24 24 L40 33 M24 24 L8 33" stroke="#3B82C4" stroke-width="1.3" opacity="0.6"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Blender 3D Projects</h3>
+        <p class="project-desc">A collection of 3D modeling and visualization projects created while learning Blender. The work includes creating 3D objects and environments, working with materials and lighting, composing scenes, and producing rendered visualizations — including an office-room scene demonstrating 3D modeling, scene composition, lighting, and rendering.</p>
+        <div class="project-tags">
+          <span class="tag">Blender</span><span class="tag">3D Modeling</span><span class="tag">Materials</span><span class="tag">Lighting</span><span class="tag">Rendering</span>
+        </div>
+      </article>
+
+      <!-- Project 4 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">04 / Data Analysis</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <polyline points="6,38 14,30 22,33 30,18 42,8" stroke="#3FA7A3" stroke-width="1.8" fill="none" opacity="0.75"/>
+              <circle cx="14" cy="30" r="2" fill="#3B82C4"/>
+              <circle cx="22" cy="33" r="2" fill="#3B82C4"/>
+              <circle cx="30" cy="18" r="2" fill="#7C6BC4"/>
+              <circle cx="42" cy="8" r="2" fill="#7C6BC4"/>
+              <line x1="6" y1="40" x2="42" y2="40" stroke="#40506A" stroke-width="1" opacity="0.4"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Startup Investment Funding Analysis</h3>
+        <p class="project-desc">An individual data analysis project examining startup investment and funding patterns using a Crunchbase-sourced global startup dataset. Explored factors associated with startups receiving follow-on funding — industry, geography, funding amounts, funding rounds, and company characteristics — through data cleaning, exploratory data analysis, feature engineering, data visualization, and statistical testing to support seed-stage investment decisions.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span><span class="tag">SciPy</span><span class="tag">Jupyter Notebook</span>
+        </div>
+      </article>
+
+      <!-- Project 5 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">05 / Application</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="8" width="14" height="10" rx="2" stroke="#3B82C4" stroke-width="1.4" opacity="0.6"/>
+              <rect x="26" y="8" width="14" height="10" rx="2" stroke="#7C6BC4" stroke-width="1.4" opacity="0.6"/>
+              <rect x="8" y="24" width="14" height="10" rx="2" stroke="#3FA7A3" stroke-width="1.4" opacity="0.6"/>
+              <path d="M28,29 h12 M28,33 h8" stroke="#40506A" stroke-width="1.3" opacity="0.55"/>
+              <path d="M34,26 l0,10" stroke="#40506A" stroke-width="1" opacity="0.3"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Ctrl + Eat — Recipe Manager</h3>
+        <p class="project-desc">An interactive recipe management application built with Python, Streamlit, and Pandas for organizing, searching, and exploring a local recipe database. Features include adding and validating new recipes, searching by ingredient, browsing the full collection, sorting by rating, filtering by category, and a random "Surprise Me" recommendation. Uses Pandas string filtering for ingredient search and custom ranking logic for sorting, with recipes stored in a CSV file behind a Streamlit interface styled with custom HTML/CSS.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Pandas</span><span class="tag">HTML/CSS</span><span class="tag">CSV</span>
+        </div>
+      </article>
+
+      <!-- Project 6 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">06 / 3D Animation</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <ellipse cx="20" cy="26" rx="9" ry="7" fill="#7C6BC4" opacity="0.65"/>
+              <circle cx="12" cy="24" r="3.4" fill="#40506A" opacity="0.7"/>
+              <line x1="20" y1="20" x2="20" y2="32" stroke="#172033" stroke-width="1" opacity="0.4"/>
+              <path d="M32,38 C 36,30 38,20 30,10" stroke="#3FA7A3" stroke-width="1.6" fill="none" opacity="0.6"/>
+              <circle cx="30" cy="10" r="2" fill="#3FA7A3"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">The Prism of Resilience — 3D Animation</h3>
+        <p class="project-desc">A collaborative 3D animation project created in Blender, focused on visual storytelling through 3D modeling, lighting, animation, and scene design. The piece follows a ladybug's journey as it transforms a dry environment into a vibrant garden, representing resilience, growth, and positive change. Contributions included 3D modeling, scene development, animation support, and team collaboration on the concept and visual story.</p>
+        <div class="project-tags">
+          <span class="tag">Blender</span><span class="tag">3D Modeling</span><span class="tag">Lighting</span><span class="tag">Animation</span><span class="tag">Scene Design</span>
+        </div>
+      </article>
+
+      <!-- Project 7 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">07 / Graph Theory</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <line x1="10" y1="12" x2="24" y2="8" stroke="#3B82C4" stroke-width="1.4" opacity="0.6"/>
+              <line x1="24" y1="8" x2="38" y2="14" stroke="#7C6BC4" stroke-width="1.4" opacity="0.6"/>
+              <line x1="24" y1="8" x2="24" y2="26" stroke="#172033" stroke-width="2" opacity="0.5"/>
+              <line x1="24" y1="26" x2="12" y2="38" stroke="#3FA7A3" stroke-width="1.4" opacity="0.6"/>
+              <line x1="24" y1="26" x2="36" y2="38" stroke="#3FA7A3" stroke-width="1.4" opacity="0.6"/>
+              <circle cx="10" cy="12" r="3" fill="#3B82C4"/>
+              <circle cx="24" cy="8" r="3" fill="#FFFFFF" stroke="#3B82C4" stroke-width="1.4"/>
+              <circle cx="38" cy="14" r="3" fill="#3B82C4"/>
+              <circle cx="24" cy="26" r="3" fill="#FFFFFF" stroke="#7C6BC4" stroke-width="1.4"/>
+              <circle cx="12" cy="38" r="3" fill="#7C6BC4"/>
+              <circle cx="36" cy="38" r="3" fill="#7C6BC4"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Graph Theory — Connectivity &amp; Bipartite Graph Analysis</h3>
+        <p class="project-desc">An academic Graph Theory project developed in MATLAB, focused on analyzing graph properties, connectivity, and structural characteristics. Implemented algorithms to identify bridges and cut vertices, determine whether a graph is bipartite, and generate a valid 2-coloring when applicable. Graphs were represented using adjacency matrices and processed programmatically to analyze and visualize the resulting properties.</p>
+        <div class="project-tags">
+          <span class="tag">MATLAB</span><span class="tag">Graph Theory</span><span class="tag">Adjacency Matrices</span><span class="tag">Graph Algorithms</span>
+        </div>
+      </article>
+
+      <!-- Project 8 -->
+      <article class="card project-card reveal">
+        <div class="project-top">
+          <span class="project-number">08 / Numerical Analysis</span>
+          <span class="project-visual" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M6,36 C 16,10 32,10 42,36" stroke="#3B82C4" stroke-width="1.8" fill="none" opacity="0.75"/>
+              <g stroke="#7C6BC4" stroke-width="1" opacity="0.5">
+                <line x1="12" y1="36" x2="12" y2="27"/>
+                <line x1="18" y1="36" x2="18" y2="17"/>
+                <line x1="24" y1="36" x2="24" y2="13"/>
+                <line x1="30" y1="36" x2="30" y2="17"/>
+                <line x1="36" y1="36" x2="36" y2="27"/>
+              </g>
+              <line x1="6" y1="36" x2="42" y2="36" stroke="#40506A" stroke-width="1" opacity="0.4"/>
+            </svg>
+          </span>
+        </div>
+        <h3 class="project-title">Numerical Integration — Newton-Cotes Methods Comparison</h3>
+        <p class="project-desc">An academic Numerical Analysis project developed in MATLAB, focused on numerical integration and the comparison of Closed Newton-Cotes formulas. Involved implementing numerical integration methods in MATLAB, comparing their accuracy and performance, and analyzing the mathematical concepts behind each method. Results and mathematical documentation were prepared using LaTeX, alongside a presentation explaining the methods, calculations, and findings.</p>
+        <div class="project-tags">
+          <span class="tag">MATLAB</span><span class="tag">LaTeX</span><span class="tag">Numerical Analysis</span><span class="tag">Numerical Integration</span><span class="tag">Closed Newton-Cotes Formulas</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ACHIEVEMENTS
+     ============================================================ -->
+<section class="achievements" id="achievements">
+  <div class="container">
+    <div class="section-label" aria-hidden="true">04 &nbsp;/&nbsp; Achievements</div>
+    <h2 class="section-heading reveal">Milestones along the way</h2>
+    <p class="section-sub reveal">Recognitions and training that mark key steps in my growth.</p>
+
+    <div class="achievements-grid">
+      <div class="card milestone is-main reveal">
+        <div class="milestone-rank" aria-hidden="true">&#129352;</div>
+        <p class="milestone-title">3rd Place — Bahrain Rental Price Prediction Challenge</p>
+        <p class="milestone-desc">Successfully achieved 3rd place in the Bahrain Rental Price Prediction Challenge on Kaggle by applying data preprocessing, exploratory data analysis, feature engineering, and machine learning techniques to predict property rental prices.</p>
+      </div>
+
+      <div class="card milestone reveal">
+        <div class="milestone-rank" aria-hidden="true">&#9889;</div>
+        <p class="milestone-title">AI &amp; Technology Achievement</p>
+        <p class="milestone-desc">Completed an AI and technology-focused achievement through a Dubai initiative involving AI commands and technical learning.</p>
+      </div>
+
+      <div class="card milestone reveal">
+        <div class="milestone-rank" aria-hidden="true">&#128202;</div>
+        <p class="milestone-title">General Assembly — Data Science Training</p>
+        <p class="milestone-desc">Completed practical Data Science training through General Assembly, developing experience in Python, statistics, data analysis, machine learning, and real-world datasets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-panel reveal">
+      <div class="noise" aria-hidden="true">
+        <svg viewBox="0 0 1180 400" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="ctaGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M48 0 L0 0 0 48" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.04"/>
+            </pattern>
+          </defs>
+          <rect width="1180" height="400" fill="url(#ctaGrid)"/>
+          <path d="M0,320 C 200,280 320,180 560,150 C 800,120 900,200 1180,80" stroke="#3FA7A3" stroke-width="1.4" fill="none" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="contact-inner">
+        <p class="section-label" style="justify-content:center; color:#8FC2E9;" aria-hidden="true">05 &nbsp;/&nbsp; Contact</p>
+        <h2 class="contact-heading">Have a project, opportunity, or idea to discuss?</h2>
+        <p class="contact-message">I'd love to connect and learn more.</p>
+
+        <div class="contact-buttons">
+          <a class="contact-btn" href="https://www.linkedin.com/in/ohoodmajed" target="_blank" rel="noopener noreferrer" aria-label="Ohood Majed Ahmed on LinkedIn (opens in a new tab)">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.86 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+            LinkedIn
+          </a>
+          <a class="contact-btn" href="https://github.com/OhoodMajed/OhoodMajed.github.io" target="_blank" rel="noopener noreferrer" aria-label="Ohood Majed Ahmed on GitHub (opens in a new tab)">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.15-1.11-1.46-1.11-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.35 4.68-4.58 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+            GitHub
+          </a>
+          <a class="contact-btn" href="mailto:ohoodm2005@gmail.com" aria-label="Email Ohood Majed Ahmed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            Email
+          </a>
+        </div>
+
+        <!-- Plaintext email + copy fallback, in case the mailto: link can't open a mail app
+             on the visitor's device (e.g. no default mail client configured). -->
+        <button type="button" class="email-copy" id="emailCopy" data-email="ohoodm2005@gmail.com" aria-label="Copy email address ohoodm2005@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+          <span id="emailCopyText">ohoodm2005@gmail.com &middot; tap to copy</span>
+        </button>
+
+        <p class="contact-closing">Let's turn ideas into data-driven solutions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <p>Ohood Majed Ahmed <span class="cross">&times;</span> Mathematics <span class="cross">&times;</span> Computer Science <span class="cross">&times;</span> Data Science &nbsp;&mdash;&nbsp; <span id="year"></span></p>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function(){
+  "use strict";
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Dynamic year ---------- */
+  var yearEl = document.getElementById("year");
+  if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+
+  /* ---------- Mobile navigation toggle ---------- */
+  var navToggle = document.getElementById("navToggle");
+  var navLinks = document.getElementById("navLinks");
+
+  function closeMenu(){
+    navLinks.classList.remove("is-open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu(){
+    navLinks.classList.add("is-open");
+    navToggle.setAttribute("aria-expanded", "true");
+  }
+
+  navToggle.addEventListener("click", function(){
+    var isOpen = navLinks.classList.contains("is-open");
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  /* Close mobile nav after clicking a link */
+  document.querySelectorAll('[data-nav]').forEach(function(link){
+    link.addEventListener("click", function(){
+      closeMenu();
+    });
+  });
+
+  /* Close mobile menu on resize back to desktop */
+  window.addEventListener("resize", function(){
+    if (window.innerWidth > 860) { closeMenu(); }
+  });
+
+  /* ---------- Smooth scrolling for in-page links ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function(link){
+    link.addEventListener("click", function(e){
+      var targetId = link.getAttribute("href");
+      var target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        var navHeight = document.getElementById("navbar").offsetHeight;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - (navHeight - 1);
+        window.scrollTo({
+          top: top,
+          behavior: reduceMotion ? "auto" : "smooth"
+        });
+        // Update the URL hash without an extra jump
+        history.pushState(null, "", targetId);
+      }
+    });
+  });
+
+  /* ---------- Sticky navbar shadow on scroll ---------- */
+  var navbar = document.getElementById("navbar");
+  function handleNavShadow(){
+    if (window.scrollY > 8) {
+      navbar.classList.add("is-scrolled");
+    } else {
+      navbar.classList.remove("is-scrolled");
+    }
+  }
+  window.addEventListener("scroll", handleNavShadow, { passive: true });
+  handleNavShadow();
+
+  /* ---------- Active navigation link on scroll ---------- */
+  var sections = Array.prototype.slice.call(document.querySelectorAll("section[id]"));
+  var navAnchors = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[data-nav]'));
+
+  function setActiveLink(id){
+    navAnchors.forEach(function(a){
+      var match = a.getAttribute("href") === "#" + id;
+      a.classList.toggle("active", match);
+      if (match) { a.setAttribute("aria-current", "true"); }
+      else { a.removeAttribute("aria-current"); }
+    });
+  }
+
+  if ("IntersectionObserver" in window) {
+    var navObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          setActiveLink(entry.target.id);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: "-45% 0px -50% 0px",
+      threshold: 0
+    });
+    sections.forEach(function(sec){ navObserver.observe(sec); });
+  }
+
+  /* ---------- Email copy-to-clipboard fallback ---------- */
+  var emailCopyBtn = document.getElementById("emailCopy");
+  var emailCopyText = document.getElementById("emailCopyText");
+  if (emailCopyBtn) {
+    emailCopyBtn.addEventListener("click", function(){
+      var email = emailCopyBtn.getAttribute("data-email");
+      var showCopied = function(){
+        var original = "ohoodm2005@gmail.com &middot; tap to copy";
+        emailCopyText.textContent = "Copied to clipboard!";
+        setTimeout(function(){ emailCopyText.innerHTML = original; }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(showCopied).catch(function(){});
+      } else {
+        var temp = document.createElement("textarea");
+        temp.value = email;
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.appendChild(temp);
+        temp.select();
+        try { document.execCommand("copy"); showCopied(); } catch(e) {}
+        document.body.removeChild(temp);
+      }
+    });
+  }
+
+  /* ---------- Scroll reveal animations ---------- */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealEls.forEach(function(el){ el.classList.add("is-visible"); });
+  } else {
+    var revealObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: "0px 0px -8% 0px",
+      threshold: 0.08
+    });
+    revealEls.forEach(function(el){ revealObserver.observe(el); });
+  }
+
+})();
+</script>
+
+</body>
+</html>
